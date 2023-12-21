@@ -17,16 +17,18 @@ rollbar.log('Hello world!')
 const students = ['Jimmy', 'Timothy', 'Jimothy']
 
 app.get('/', (req, res) => {
+    rollbar.info("User accessed the website.")
     res.sendFile(path.join(__dirname, '/index.html'))
 })
 
 app.get('/api/students', (req, res) => {
+    rollbar.warning("Woah! User is accessing student information!")
     res.status(200).send(students)
 })
 
 app.post('/api/students', (req, res) => {
    let {name} = req.body
-
+    rollbar.critical(`THERE IS AN IMPOSTER AMONG US!! THEIR NAME IS ${name}`)
    const index = students.findIndex(student => {
        return student === name
    })
@@ -42,12 +44,14 @@ app.post('/api/students', (req, res) => {
        }
    } catch (err) {
        console.log(err)
+//        rollbar.error("Bloop: error detected...")
+// we put in delete fxn just for testing
    }
 })
 
 app.delete('/api/students/:index', (req, res) => {
     const targetIndex = +req.params.index
-    
+    rollbar.error("Bloop: error detected...")
     students.splice(targetIndex, 1)
     res.status(200).send(students)
 })
